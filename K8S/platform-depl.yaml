@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: platformservice-prc-deply
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: platforservice-prc
+    template:
+        metadata:
+            labels:
+                app: platforservice-prc
+        spec:
+            containers:
+                - name: platforservice-prc
+                  image: mukundhak/platformservicepractice
