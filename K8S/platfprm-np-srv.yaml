@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata: 
     name: platformservice-prc-np-srv
+    namespace: practice
 spec:
     type: NodePort
     selector:

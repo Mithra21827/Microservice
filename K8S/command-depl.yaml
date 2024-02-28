@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: platformservice-prc-deply
+    name: commandservice-depl
     namespace: practice
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: platforservice-prc
+            app: commandservice-prc
     template:
         metadata:
             labels:
-                app: platforservice-prc
+                app: commandservice-prc
         spec:
             containers:
-                - name: platforservice-prc
-                  image: mukundhak/platformservicepractice
+                - name: commandservice-prc
+                  image: mukundhak/commandservicepractice
 ---
 apiVersion: v1
 kind: Service
-metadata: 
-    name: platform-clusterip-srv
+metadata:
+    name: commandservice-clusterip-srv
     namespace: practice
 spec:
     type: ClusterIP
     selector:
-        app: platforservice-prc
+        app: commandservice-prc
     ports:
-        - name: platforservice-prc
+        - name: commandservice-prc
           protocol: TCP
           port: 80
-          targetPort: 80 
+          targetPort: 80
