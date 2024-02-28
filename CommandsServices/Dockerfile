@@ -1,24 +1,15 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.Microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["CommandsServices/CommandsServices.csproj", "CommandsServices/"]
-RUN dotnet restore "./CommandsServices/./CommandsServices.csproj"
-COPY . .
-WORKDIR "/src/CommandsServices"
-RUN dotnet build "./CommandsServices.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY *.csproj ./
+RUN dotnet restore
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./CommandsServices.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+COPY . ./
+RUN dotnet publish -c release  -o out
 
-FROM base AS final
+FROM mcr.Microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CommandsServices.dll"]
+
+COPY --from=build /app/out ./
+CMD ["dotnet","CommandsServices.dll"]
+
